@@ -7,245 +7,319 @@
   <link rel="manifest" href="manifest.json" />
 <title>Agendamento Premium</title>
 <style>
-  /* Reset e base */
-  body {
-    background: #111;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 15px 80px; /* espaço para barra inferior fixa */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  header {
-      text-align:center;
-      background: #000;
-      padding: 20px;
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 16px;
-      font-weight: 300;
-      color: #FFD700;
-      letter-spacing: 2px;
-      user-select: none;
-      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
-      border-radius: 8px;
-    }
-  main {
-    max-width: 480px;
-    margin: 20px auto 0;
-  }
-  label {
-    display: block;
-    margin-top: 20px;
-    font-weight: 600;
-    color: #FFD700;
-    font-size: 1.1rem;
-    user-select: none;
-  }
-  #listaBarbeiros, #listaServicos {
-    display: flex;
-    gap: 15px;
-    overflow-x: auto;
-    padding: 15px 5px 10px;
-    scrollbar-width: thin;
-    scrollbar-color: #FFD70033 transparent;
-  }
-  #listaBarbeiros::-webkit-scrollbar,
-  #listaServicos::-webkit-scrollbar {
-    height: 8px;
-  }
-  #listaBarbeiros::-webkit-scrollbar-thumb,
-  #listaServicos::-webkit-scrollbar-thumb {
-    background-color: #FFD70066;
-    border-radius: 10px;
-  }
-  .item-select {
-    background: #222;
-    border-radius: 15px;
-    padding: 12px 10px;
-    cursor: pointer;
-    flex: 0 0 130px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 10px #FFD70066;
-    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
-    user-select: none;
-  }
-  .item-select:hover {
-    background-color: #333;
-    box-shadow: 0 0 18px #FFD700cc;
-  }
-  .item-select.selected {
-    background: #FFD700;
-    color: #111;
-    box-shadow: 0 0 20px #ffdd0044 inset;
-  }
-  .item-select img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 15px;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 0 3px #000a);
-    transition: filter 0.3s;
-  }
-  .item-select.selected img {
-    filter: drop-shadow(0 0 6px #000);
-  }
-  .item-select strong {
-    font-size: 1rem;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .item-select small {
-    font-size: 0.8rem;
-    opacity: 0.85;
-    text-align: center;
-    margin-top: 4px;
-  }
-  select, input[type=date], input[type=text], input[type=tel] {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 15px;
-    border: none;
-    background: #222;
-    color: #fff;
-    font-size: 1.1rem;
-    outline: 3px solid transparent;
-    transition: outline-color 0.3s, background-color 0.3s;
-    box-sizing: border-box;
-  }
-  select:focus, input:focus {
-    outline-color: #FFD700;
-    background-color: #333;
-  }
-  select:disabled {
-    color: #777;
-    cursor: not-allowed;
-  }
-  ::placeholder {
-    color: #bbb;
-  }
-  button {
-    margin-top: 30px;
-    width: 100%;
-    background: #FFD700;
-    border: none;
-    color: #111;
-    font-weight: 700;
-    font-size: 1.3rem;
-    padding: 16px 0;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 6px 20px #FFD700aa;
-    transition: background-color 0.3s, box-shadow 0.3s;
-    user-select: none;
-  }
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-  button:hover:not(:disabled) {
-    background: #e6c200;
-    box-shadow: 0 8px 28px #ffd700ee;
-  }
-  #msgSucesso {
-    margin-top: 30px;
-    background: #28a745dd;
-    color: #fff;
-    padding: 18px 20px;
-    border-radius: 15px;
-    font-weight: 700;
-    text-align: center;
-    user-select: none;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.5s, max-height 0.5s;
-  }
-  #msgSucesso.show {
-    opacity: 1;
-    max-height: 100px;
-  }
-  /* === Barra inferior fixa com menu === */
-  #barraInferior {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    background: #FFD700;
-    box-shadow: 0 -3px 10px #ccaa0077;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.8rem;
-    user-select: none;
-    z-index: 9999;
-  }
-  #painelAgendamento {
-    position: fixed;
-    bottom: 56px;
-    left: 0;
-    right: 0;
-    max-width: 480px;
-    margin: 0 auto;
-    background: #222;
-    color: #FFD700;
-    box-shadow: 0 -4px 15px #000c inset;
-    border-radius: 15px 15px 0 0;
-    padding: 20px 25px;
-    transform: translateY(100%);
-    transition: transform 0.35s ease;
-    z-index: 9998;
-  }
-  #painelAgendamento.show {
-    transform: translateY(0);
-  }
-  #painelAgendamento h2 {
-    margin: 0 0 15px;
-    font-weight: 700;
-    font-size: 1.4rem;
-    user-select: none;
-  }
-  #painelAgendamento p {
-    margin: 8px 0;
-    font-size: 1rem;
-    user-select: text;
-  }
-  #btnContatoWhats {
-    margin-top: 15px;
-    background: #25d366;
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-radius: 15px;
-    padding: 12px;
-    text-align: center;
-    cursor: pointer;
-    box-shadow: 0 3px 10px #128c4aaa;
-    user-select: none;
-    display: inline-block;
-    width: 100%;
-    text-decoration: none;
-    transition: background-color 0.3s;
-  }
-  #btnContatoWhats:hover {
-    background: #1ebe57;
-  }
-  #logo {
-      border-radius:50%;
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
+    /* Reset e base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #111;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  padding-bottom: 80px; /* espaço para barra inferior fixa */
+  overflow-x: hidden;
+}
+
+/* Cabeçalho */
+header {
+  text-align: center;
+  background: #000;
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #FFD700;
+  letter-spacing: 2px;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+  border-radius: 8px;
+}
+
+/* Container principal */
+main {
+  width: 100%;
+  max-width: 480px;
+  margin: 20px auto;
+  padding: 0 15px;
+}
+
+/* Rótulos */
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: 600;
+  color: #FFD700;
+  font-size: 1.1rem;
+  user-select: none;
+}
+
+/* Listas de seleção */
+#listaBarbeiros, #listaServicos {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 15px 5px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #FFD70033 transparent;
+}
+
+#listaBarbeiros::-webkit-scrollbar,
+#listaServicos::-webkit-scrollbar {
+  height: 8px;
+}
+
+#listaBarbeiros::-webkit-scrollbar-thumb,
+#listaServicos::-webkit-scrollbar-thumb {
+  background-color: #FFD70066;
+  border-radius: 10px;
+}
+
+/* Itens selecionáveis */
+.item-select {
+  background: #222;
+  border-radius: 15px;
+  padding: 12px 10px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 10px #FFD70066;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.item-select:hover {
+  background-color: #333;
+  box-shadow: 0 0 18px #FFD700cc;
+}
+
+.item-select.selected {
+  background: #FFD700;
+  color: #111;
+  box-shadow: 0 0 20px #ffdd0044 inset;
+}
+
+.item-select img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 3px #000a);
+  transition: filter 0.3s;
+}
+
+.item-select.selected img {
+  filter: drop-shadow(0 0 6px #000);
+}
+
+.item-select strong {
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.item-select small {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Inputs e selects */
+select, input[type=date], input[type=text], input[type=tel] {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 15px;
+  border: none;
+  background: #222;
+  color: #fff;
+  font-size: 1.1rem;
+  outline: 3px solid transparent;
+  transition: outline-color 0.3s, background-color 0.3s;
+  margin-top: 8px;
+}
+
+select:focus, input:focus {
+  outline-color: #FFD700;
+  background-color: #333;
+}
+
+select:disabled {
+  color: #777;
+  cursor: not-allowed;
+}
+
+::placeholder {
+  color: #bbb;
+}
+
+/* Botão de agendamento */
+button {
+  margin-top: 30px;
+  width: 100%;
+  background: #FFD700;
+  border: none;
+  color: #111;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 16px 0;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px #FFD700aa;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  user-select: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+button:hover:not(:disabled) {
+  background: #e6c200;
+  box-shadow: 0 8px 28px #ffd700ee;
+}
+
+/* Mensagem de sucesso */
+#msgSucesso {
+  margin-top: 30px;
+  background: #28a745dd;
+  color: #fff;
+  padding: 18px 20px;
+  border-radius: 15px;
+  font-weight: 700;
+  text-align: center;
+  user-select: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.5s, max-height 0.5s;
+}
+
+#msgSucesso.show {
+  opacity: 1;
+  max-height: 100px;
+}
+
+/* Barra inferior */
+#barraInferior {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #FFD700;
+  box-shadow: 0 -3px 10px #ccaa0077;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.8rem;
+  user-select: none;
+  z-index: 9999;
+}
+
+/* Painel agendamento */
+#painelAgendamento {
+  position: fixed;
+  bottom: 56px;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #222;
+  color: #FFD700;
+  box-shadow: 0 -4px 15px #000c inset;
+  border-radius: 15px 15px 0 0;
+  padding: 20px 25px;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
+  z-index: 9998;
+}
+
+#painelAgendamento.show {
+  transform: translateY(0);
+}
+
+#painelAgendamento h2 {
+  margin: 0 0 15px;
+  font-weight: 700;
+  font-size: 1.4rem;
+  user-select: none;
+}
+
+#painelAgendamento p {
+  margin: 8px 0;
+  font-size: 1rem;
+  user-select: text;
+}
+
+/* Botão WhatsApp */
+#btnContatoWhats {
+  margin-top: 15px;
+  background: #25d366;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px #128c4aaa;
+  user-select: none;
+  display: inline-block;
+  width: 100%;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+#btnContatoWhats:hover {
+  background: #1ebe57;
+}
+
+/* Logo */
+#logo {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Banner de instalação */
+#installPrompt {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FFD700;
+  color: #121212;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FFD700aa;
+  z-index: 9999;
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>
