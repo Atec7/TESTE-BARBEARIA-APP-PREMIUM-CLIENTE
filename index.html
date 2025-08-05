@@ -11,7 +11,7 @@
     color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0 15px 30px;
+    padding: 0 15px 80px; /* espaço para barra inferior fixa */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -38,7 +38,6 @@
     font-size: 1.1rem;
     user-select: none;
   }
-  /* Containers horizontal scroll */
   #listaBarbeiros, #listaServicos {
     display: flex;
     gap: 15px;
@@ -56,7 +55,6 @@
     background-color: #FFD70066;
     border-radius: 10px;
   }
-
   .item-select {
     background: #222;
     border-radius: 15px;
@@ -102,7 +100,6 @@
     text-align: center;
     margin-top: 4px;
   }
-
   select, input[type=date], input[type=text], input[type=tel] {
     width: 100%;
     padding: 14px 16px;
@@ -126,7 +123,6 @@
   ::placeholder {
     color: #bbb;
   }
-
   button {
     margin-top: 30px;
     width: 100%;
@@ -151,7 +147,6 @@
     background: #e6c200;
     box-shadow: 0 8px 28px #ffd700ee;
   }
-
   #msgSucesso {
     margin-top: 30px;
     background: #28a745dd;
@@ -169,6 +164,73 @@
   #msgSucesso.show {
     opacity: 1;
     max-height: 100px;
+  }
+  /* === Barra inferior fixa com menu === */
+  #barraInferior {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #FFD700;
+    box-shadow: 0 -3px 10px #ccaa0077;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.8rem;
+    user-select: none;
+    z-index: 9999;
+  }
+  #painelAgendamento {
+    position: fixed;
+    bottom: 56px;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    background: #222;
+    color: #FFD700;
+    box-shadow: 0 -4px 15px #000c inset;
+    border-radius: 15px 15px 0 0;
+    padding: 20px 25px;
+    transform: translateY(100%);
+    transition: transform 0.35s ease;
+    z-index: 9998;
+  }
+  #painelAgendamento.show {
+    transform: translateY(0);
+  }
+  #painelAgendamento h2 {
+    margin: 0 0 15px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    user-select: none;
+  }
+  #painelAgendamento p {
+    margin: 8px 0;
+    font-size: 1rem;
+    user-select: text;
+  }
+  #btnContatoWhats {
+    margin-top: 15px;
+    background: #25d366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px #128c4aaa;
+    user-select: none;
+    display: inline-block;
+    width: 100%;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  #btnContatoWhats:hover {
+    background: #1ebe57;
   }
 </style>
 </head>
@@ -198,6 +260,20 @@
   <div id="msgSucesso">Agendamento realizado com sucesso! Entraremos em contato.</div>
 </main>
 
+<!-- Barra Inferior -->
+<div id="barraInferior" title="Último agendamento">📅</div>
+
+<!-- Painel do último agendamento -->
+<div id="painelAgendamento" aria-live="polite" aria-atomic="true" aria-label="Detalhes do último agendamento">
+  <h2>Último Agendamento</h2>
+  <div id="detalhesAgendamento">
+    <p>Nenhum agendamento realizado ainda.</p>
+  </div>
+  <a id="btnContatoWhats" href="#" target="_blank" rel="noopener noreferrer" aria-label="Entrar em contato pelo WhatsApp">
+    📲 Contatar Barbearia
+  </a>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
   import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
@@ -225,9 +301,13 @@
   const btnAgendar = document.getElementById('btnAgendar');
   const msgSucesso = document.getElementById('msgSucesso');
 
+  const barraInferior = document.getElementById('barraInferior');
+  const painelAgendamento = document.getElementById('painelAgendamento');
+  const detalhesAgendamento = document.getElementById('detalhesAgendamento');
+  const btnContatoWhats = document.getElementById('btnContatoWhats');
+
   let barbeiros = {};
   let servicos = {};
-  let agendamentos = {};
 
   let barbeiroSelecionado = null;
   let servicoSelecionado = null;
@@ -281,17 +361,23 @@
 
   function selecionarVisual(container, selecionadoDiv) {
     [...container.children].forEach(c => c.classList.remove('selected'));
-    selecionadoDiv.classList.add('selected');
+    if(selecionadoDiv) selecionadoDiv.classList.add('selected');
   }
 
   async function carregarAgendamentos() {
     const snap = await get(ref(db, 'agendamentos'));
-    agendamentos = snap.val() || {};
+    return snap.val() || {};
   }
 
   function horarioToMin(hhmm) {
     const [hh, mm] = hhmm.split(':').map(Number);
     return hh*60 + mm;
+  }
+
+  function minToHorario(min) {
+    const h = Math.floor(min/60);
+    const m = min % 60;
+    return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
   }
 
   async function atualizarHorasDisponiveis() {
@@ -304,7 +390,7 @@
       return;
     }
 
-    await carregarAgendamentos();
+    const agendamentos = await carregarAgendamentos();
 
     const tempoServico = Number(servicos[servicoSelecionado]?.tempo) || 30;
     const dataSel = dataInput.value;
@@ -332,6 +418,19 @@
       });
     });
 
+    // Remove horários que já passaram se a data for hoje
+    const agora = new Date();
+    const hojeStr = agora.toISOString().slice(0,10);
+    if (dataSel === hojeStr) {
+      const agoraMin = agora.getHours()*60 + agora.getMinutes();
+      disponiveis.forEach(slot => {
+        const slotInicio = horarioToMin(slot.hora);
+        if (slotInicio <= agoraMin) {
+          slot.disponivel = false;
+        }
+      });
+    }
+
     const horariosValidos = disponiveis.filter(d => d.disponivel);
 
     if (horariosValidos.length === 0) {
@@ -355,49 +454,93 @@
     }
   }
 
-  async function agendar() {
+  // Atualiza painel do último agendamento local (localStorage)
+  function atualizarUltimoAgendamentoLocal() {
+    const ultimo = localStorage.getItem('ultimoAgendamento');
+    if (!ultimo) {
+      detalhesAgendamento.innerHTML = `<p>Nenhum agendamento realizado ainda.</p>`;
+      btnContatoWhats.href = `https://wa.me/5564992952748`;
+      return;
+    }
+
+    const ag = JSON.parse(ultimo);
+
+    const barbeiroNome = barbeiros[ag.barbeiroId]?.nome || 'Barbeiro';
+    const servicoNome = servicos[ag.servicoId]?.nome || 'Serviço';
+    const dataHora = new Date(ag.horario);
+    const dataFormatada = dataHora.toLocaleDateString('pt-BR');
+    const horaFormatada = dataHora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+
+    detalhesAgendamento.innerHTML = `
+      <p><strong>Cliente:</strong> ${ag.nome}</p>
+      <p><strong>Barbeiro:</strong> ${barbeiroNome}</p>
+      <p><strong>Serviço:</strong> ${servicoNome}</p>
+      <p><strong>Data:</strong> ${dataFormatada} às ${horaFormatada}</p>
+    `;
+
+    const mensagem = encodeURIComponent(`Olá, gostaria de falar sobre meu agendamento realizado para ${dataFormatada} às ${horaFormatada}.`);
+    btnContatoWhats.href = `https://wa.me/5564992952748?text=${mensagem}`;
+  }
+
+  btnAgendar.onclick = async () => {
     if(btnAgendar.disabled) return;
-    if(!confirm("Confirma seu agendamento?")) return;
+    if(!confirm('Confirmar agendamento?')) return;
 
     const agendamento = {
       barbeiroId: barbeiroSelecionado,
       servicoId: servicoSelecionado,
-      horario: new Date(`${dataInput.value}T${horaSelect.value}:00`).toISOString(),
       nome: nomeInput.value.trim(),
       whatsapp: whatsappInput.value.trim(),
-      status: "Aguardando"
+      horario: `${dataInput.value}T${horaSelect.value}:00`
     };
 
     try {
       await push(ref(db, 'agendamentos'), agendamento);
+      // Salvar no localStorage para mostrar no painel
+      localStorage.setItem('ultimoAgendamento', JSON.stringify(agendamento));
+      atualizarUltimoAgendamentoLocal();
+
+      // Mensagem de sucesso e limpar formulário
       msgSucesso.classList.add('show');
-      // Limpar seleção e formulário
+      setTimeout(() => msgSucesso.classList.remove('show'), 4000);
+
+      // Resetar formulário
       barbeiroSelecionado = null;
       servicoSelecionado = null;
+      selecionarVisual(listaBarbeiros, null);
+      selecionarVisual(listaServicos, null);
       dataInput.value = '';
       horaSelect.innerHTML = `<option>Escolha barbeiro, serviço e data</option>`;
       horaSelect.disabled = true;
       nomeInput.value = '';
       whatsappInput.value = '';
-      [...listaBarbeiros.children].forEach(c => c.classList.remove('selected'));
-      [...listaServicos.children].forEach(c => c.classList.remove('selected'));
       btnAgendar.disabled = true;
-      setTimeout(() => msgSucesso.classList.remove('show'), 4000);
     } catch(e) {
-      alert("Erro ao agendar, tente novamente.");
+      alert('Erro ao enviar agendamento. Tente novamente.');
       console.error(e);
     }
-  }
+  };
 
-  dataInput.addEventListener('change', () => { atualizarHorasDisponiveis(); validarFormulario(); });
-  horaSelect.addEventListener('change', validarFormulario);
-  nomeInput.addEventListener('input', validarFormulario);
-  whatsappInput.addEventListener('input', validarFormulario);
-  btnAgendar.onclick = agendar;
+  dataInput.onchange = () => {
+    atualizarHorasDisponiveis();
+    validarFormulario();
+  };
+  horaSelect.onchange = validarFormulario;
+  nomeInput.oninput = validarFormulario;
+  whatsappInput.oninput = validarFormulario;
 
-  // Carrega barbeiros e serviços inicialmente
-  await carregarBarbeiros();
-  await carregarServicos();
+  // Toggle painel inferior
+  barraInferior.onclick = () => {
+    painelAgendamento.classList.toggle('show');
+  };
+
+  // Inicialização
+  (async () => {
+    await carregarBarbeiros();
+    await carregarServicos();
+    atualizarUltimoAgendamentoLocal();
+  })();
 </script>
+
 </body>
 </html>
