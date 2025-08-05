@@ -5,35 +5,170 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Agendamento Premium</title>
 <style>
-  body { background:#111; color:#fff; font-family: 'Segoe UI', sans-serif; margin:0; padding:0 10px; }
-  header { background:#000; color:#FFD700; text-align:center; padding:15px 0; font-weight:700; font-size:1.5rem; box-shadow:0 2px 10px #FFD700aa; }
-  main { max-width:480px; margin:15px auto; }
-  label { display:block; margin-top:12px; font-weight:600; color:#FFD700; }
-  #listaBarbeiros, #listaServicos { display:flex; flex-wrap: nowrap; overflow-x: auto; gap:12px; padding:10px 0; }
+  /* Reset e base */
+  body {
+    background: #111;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0 15px 30px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  header {
+    background: #000;
+    color: #FFD700;
+    text-align: center;
+    padding: 20px 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    box-shadow: 0 3px 15px #FFD700cc;
+    user-select: none;
+  }
+  main {
+    max-width: 480px;
+    margin: 20px auto 0;
+  }
+  label {
+    display: block;
+    margin-top: 20px;
+    font-weight: 600;
+    color: #FFD700;
+    font-size: 1.1rem;
+    user-select: none;
+  }
+  /* Containers horizontal scroll */
+  #listaBarbeiros, #listaServicos {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 15px 5px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #FFD70033 transparent;
+  }
+  #listaBarbeiros::-webkit-scrollbar,
+  #listaServicos::-webkit-scrollbar {
+    height: 8px;
+  }
+  #listaBarbeiros::-webkit-scrollbar-thumb,
+  #listaServicos::-webkit-scrollbar-thumb {
+    background-color: #FFD70066;
+    border-radius: 10px;
+  }
+
   .item-select {
-    background:#222; border-radius:12px; padding:10px; cursor:pointer; flex:0 0 auto; width:120px;
-    display:flex; flex-direction: column; align-items:center; box-shadow: 0 0 8px #FFD700bb;
-    transition: background-color 0.2s;
+    background: #222;
+    border-radius: 15px;
+    padding: 12px 10px;
+    cursor: pointer;
+    flex: 0 0 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 10px #FFD70066;
+    transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+    user-select: none;
   }
-  .item-select.selected { background:#FFD700; color:#000; }
-  .item-select img { width:90px; height:90px; object-fit:cover; border-radius:10px; margin-bottom:8px; }
-  .item-select strong { font-size:1rem; text-align:center; }
-  .item-select small { font-size:0.8rem; opacity:0.8; }
+  .item-select:hover {
+    background-color: #333;
+    box-shadow: 0 0 18px #FFD700cc;
+  }
+  .item-select.selected {
+    background: #FFD700;
+    color: #111;
+    box-shadow: 0 0 20px #ffdd0044 inset;
+  }
+  .item-select img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 3px #000a);
+    transition: filter 0.3s;
+  }
+  .item-select.selected img {
+    filter: drop-shadow(0 0 6px #000);
+  }
+  .item-select strong {
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .item-select small {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    text-align: center;
+    margin-top: 4px;
+  }
+
   select, input[type=date], input[type=text], input[type=tel] {
-    width:100%; padding:12px; border-radius:10px; border:none; background:#222; color:#fff;
-    font-size:1rem; outline: 2px solid transparent; transition: outline-color 0.2s;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 15px;
+    border: none;
+    background: #222;
+    color: #fff;
+    font-size: 1.1rem;
+    outline: 3px solid transparent;
+    transition: outline-color 0.3s, background-color 0.3s;
+    box-sizing: border-box;
   }
-  select:focus, input:focus { outline-color:#FFD700; background:#333; }
+  select:focus, input:focus {
+    outline-color: #FFD700;
+    background-color: #333;
+  }
+  select:disabled {
+    color: #777;
+    cursor: not-allowed;
+  }
+  ::placeholder {
+    color: #bbb;
+  }
+
   button {
-    margin-top:20px; width:100%; background:#FFD700; border:none; color:#000; font-weight:700;
-    font-size:1.2rem; padding:15px; border-radius:15px; cursor:pointer; box-shadow:0 4px 15px #FFD700aa;
-    transition: background-color 0.3s;
+    margin-top: 30px;
+    width: 100%;
+    background: #FFD700;
+    border: none;
+    color: #111;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 16px 0;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px #FFD700aa;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    user-select: none;
   }
-  button:disabled { opacity:0.5; cursor:not-allowed; }
-  button:hover:not(:disabled) { background:#e6c200; }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  button:hover:not(:disabled) {
+    background: #e6c200;
+    box-shadow: 0 8px 28px #ffd700ee;
+  }
+
   #msgSucesso {
-    margin-top:20px; background:#28a745cc; color:#fff; padding:15px; border-radius:12px;
-    font-weight:700; text-align:center; display:none;
+    margin-top: 30px;
+    background: #28a745dd;
+    color: #fff;
+    padding: 18px 20px;
+    border-radius: 15px;
+    font-weight: 700;
+    text-align: center;
+    user-select: none;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s, max-height 0.5s;
+  }
+  #msgSucesso.show {
+    opacity: 1;
+    max-height: 100px;
   }
 </style>
 </head>
@@ -97,14 +232,12 @@
   let barbeiroSelecionado = null;
   let servicoSelecionado = null;
 
-  // Horários fixos: 9h00 a 18h30, em passos de 30 minutos
   const horariosFixos = [];
   for(let h=9; h<=18; h++) {
     horariosFixos.push(`${h.toString().padStart(2,'0')}:00`);
     horariosFixos.push(`${h.toString().padStart(2,'0')}:30`);
   }
 
-  // Define data mínima como hoje
   const hojeStr = new Date().toISOString().slice(0,10);
   dataInput.min = hojeStr;
 
@@ -161,12 +294,6 @@
     return hh*60 + mm;
   }
 
-  function minToHorario(min) {
-    const h = Math.floor(min/60);
-    const m = min % 60;
-    return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-  }
-
   async function atualizarHorasDisponiveis() {
     horaSelect.innerHTML = '';
     horaSelect.disabled = true;
@@ -182,17 +309,14 @@
     const tempoServico = Number(servicos[servicoSelecionado]?.tempo) || 30;
     const dataSel = dataInput.value;
 
-    // Filtra agendamentos do barbeiro e data
     const agendamentosDoDia = Object.values(agendamentos).filter(a => {
       if(a.barbeiroId !== barbeiroSelecionado) return false;
       const dt = new Date(a.horario);
       return dt.toISOString().slice(0,10) === dataSel;
     });
 
-    // Marca todos horários como disponíveis inicialmente
     const disponiveis = horariosFixos.map(h => ({hora: h, disponivel: true}));
 
-    // Bloqueia horários que conflitam com agendamentos existentes
     agendamentosDoDia.forEach(a => {
       const dt = new Date(a.horario);
       const inicio = dt.getHours()*60 + dt.getMinutes();
@@ -202,7 +326,6 @@
       disponiveis.forEach(slot => {
         const slotInicio = horarioToMin(slot.hora);
         const slotFim = slotInicio + tempoServico;
-        // conflito se não totalmente antes ou depois
         if (!(slotFim <= inicio || slotInicio >= fim)) {
           slot.disponivel = false;
         }
@@ -247,7 +370,7 @@
 
     try {
       await push(ref(db, 'agendamentos'), agendamento);
-      msgSucesso.style.display = 'block';
+      msgSucesso.classList.add('show');
       // Limpar seleção e formulário
       barbeiroSelecionado = null;
       servicoSelecionado = null;
@@ -259,14 +382,13 @@
       [...listaBarbeiros.children].forEach(c => c.classList.remove('selected'));
       [...listaServicos.children].forEach(c => c.classList.remove('selected'));
       btnAgendar.disabled = true;
-      setTimeout(() => msgSucesso.style.display = 'none', 4000);
+      setTimeout(() => msgSucesso.classList.remove('show'), 4000);
     } catch(e) {
       alert("Erro ao agendar, tente novamente.");
       console.error(e);
     }
   }
 
-  // Eventos
   dataInput.addEventListener('change', () => { atualizarHorasDisponiveis(); validarFormulario(); });
   horaSelect.addEventListener('change', validarFormulario);
   nomeInput.addEventListener('input', validarFormulario);
