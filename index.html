@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,16 +18,22 @@
     -moz-osx-font-smoothing: grayscale;
   }
   header {
-    background: #000;
-    color: #FFD700;
-    text-align: center;
-    padding: 20px 0;
-    font-weight: 700;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    box-shadow: 0 3px 15px #FFD700cc;
-    user-select: none;
-  }
+      text-align:center;
+      background: #000;
+      padding: 20px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 300;
+      color: #FFD700;
+      letter-spacing: 2px;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+      border-radius: 8px;
+    }
   main {
     max-width: 480px;
     margin: 20px auto 0;
@@ -233,10 +240,16 @@
   #btnContatoWhats:hover {
     background: #1ebe57;
   }
+  #logo {
+      border-radius:50%;
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
 </style>
 </head>
 <body>
-<header>Agende seu Corte</header>
+<header><img src="img/logo.jpg" alt="Logo da Barbearia" id="logo" />Agende seu Corte</header>
 <main>
   <label>Barbeiros</label>
   <div id="listaBarbeiros">Carregando...</div>
