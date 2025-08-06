@@ -664,7 +664,7 @@ async function carregarServicos() {
 function filtrarBarbeirosServicos() {
   // Filtrar barbeiros
   listaBarbeiros.innerHTML = '';
-  for (const [id,b] of Object.entries(barbeiros)) {
+  for (const [id, b] of Object.entries(barbeiros)) {
     const podeExibir = !servicoSelecionado || (b.servicos || []).includes(servicoSelecionado);
     if (!podeExibir) continue;
 
@@ -676,6 +676,8 @@ function filtrarBarbeirosServicos() {
       <strong>${b.nome}</strong>
       <small id="contador-${id}">Carregando...</small>
     `;
+    if (barbeiroSelecionado === id) div.classList.add('selected');
+
     div.onclick = () => {
       barbeiroSelecionado = id;
       selecionarVisual(listaBarbeiros, div);
@@ -690,7 +692,9 @@ function filtrarBarbeirosServicos() {
   // Filtrar serviços
   listaServicos.innerHTML = '';
   const servicosIds = barbeiroSelecionado ? (barbeiros[barbeiroSelecionado].servicos || []) : Object.keys(servicos);
-  const servicosFiltrados = servicoSelecionado ? [servicoSelecionado].filter(sid => servicos[sid] && (!barbeiroSelecionado || servicosIds.includes(sid))) : servicosIds;
+  const servicosFiltrados = servicoSelecionado
+    ? [servicoSelecionado].filter(sid => servicos[sid] && (!barbeiroSelecionado || servicosIds.includes(sid)))
+    : servicosIds;
 
   if (servicosFiltrados.length === 0) {
     listaServicos.innerHTML = '<p>Não há serviços disponíveis.</p>';
@@ -707,6 +711,8 @@ function filtrarBarbeirosServicos() {
         <strong>${s.nome}</strong>
         <small>R$ ${s.preco} - ${s.tempo} min</small>
       `;
+      if (servicoSelecionado === sid) div.classList.add('selected');
+
       div.onclick = () => {
         servicoSelecionado = sid;
         selecionarVisual(listaServicos, div);
@@ -719,11 +725,10 @@ function filtrarBarbeirosServicos() {
   }
 }
 
-
 // --- Seleção visual ---
 function selecionarVisual(container, selecionadoDiv) {
   [...container.children].forEach(c => c.classList.remove('selected'));
-  if(selecionadoDiv) selecionadoDiv.classList.add('selected');
+  if (selecionadoDiv) selecionadoDiv.classList.add('selected');
 }
 
 // --- Carregar agendamentos ---
@@ -735,13 +740,13 @@ async function carregarAgendamentos() {
 // --- Conversões de horários ---
 function horarioToMin(hhmm) {
   const [hh, mm] = hhmm.split(':').map(Number);
-  return hh*60 + mm;
+  return hh * 60 + mm;
 }
 
 function minToHorario(min) {
-  const h = Math.floor(min/60);
+  const h = Math.floor(min / 60);
   const m = min % 60;
-  return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
 }
 
 // --- Atualizar horários disponíveis ---
@@ -760,16 +765,16 @@ async function atualizarHorasDisponiveis() {
   const dataSel = dataInput.value;
 
   const agendamentosDoDia = Object.values(agendamentos).filter(a => {
-    if(a.barbeiroId !== barbeiroSelecionado) return false;
+    if (a.barbeiroId !== barbeiroSelecionado) return false;
     const dt = new Date(a.horario);
-    return dt.toISOString().slice(0,10) === dataSel;
+    return dt.toISOString().slice(0, 10) === dataSel;
   });
 
-  const disponiveis = horariosFixos.map(h => ({hora: h, disponivel: true}));
+  const disponiveis = horariosFixos.map(h => ({ hora: h, disponivel: true }));
 
   agendamentosDoDia.forEach(a => {
     const dt = new Date(a.horario);
-    const inicio = dt.getHours()*60 + dt.getMinutes();
+    const inicio = dt.getHours() * 60 + dt.getMinutes();
     const servTempo = Number(servicos[a.servicoId]?.tempo) || 30;
     const fim = inicio + servTempo;
 
@@ -781,8 +786,8 @@ async function atualizarHorasDisponiveis() {
   });
 
   const agora = new Date();
-  if (dataSel === agora.toISOString().slice(0,10)) {
-    const agoraMin = agora.getHours()*60 + agora.getMinutes();
+  if (dataSel === agora.toISOString().slice(0, 10)) {
+    const agoraMin = agora.getHours() * 60 + agora.getMinutes();
     disponiveis.forEach(slot => {
       const slotInicio = horarioToMin(slot.hora);
       if (slotInicio <= agoraMin) slot.disponivel = false;
@@ -812,11 +817,11 @@ function validarFormulario() {
 async function contarAgendamentosHoje(barbeiroId) {
   const snap = await get(ref(db, 'agendamentos'));
   const agendamentos = snap.val() || {};
-  const hoje = new Date().toISOString().slice(0,10);
+  const hoje = new Date().toISOString().slice(0, 10);
   let total = 0;
   for (const ag of Object.values(agendamentos)) {
     if (ag.barbeiroId === barbeiroId) {
-      const dataAg = new Date(ag.horario).toISOString().slice(0,10);
+      const dataAg = new Date(ag.horario).toISOString().slice(0, 10);
       if (dataAg === hoje) total++;
     }
   }
@@ -838,7 +843,7 @@ function atualizarUltimoAgendamentoLocal() {
   const servicoNome = servicos[ag.servicoId]?.nome || 'Serviço';
   const dataHora = new Date(ag.horario);
   const dataFormatada = dataHora.toLocaleDateString('pt-BR');
-  const horaFormatada = dataHora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+  const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
   detalhesAgendamento.innerHTML = `
     <p><strong>Cliente:</strong> ${ag.nome}</p>
@@ -853,8 +858,8 @@ function atualizarUltimoAgendamentoLocal() {
 
 // --- Botão agendar ---
 btnAgendar.onclick = async () => {
-  if(btnAgendar.disabled) return;
-  if(!confirm('Confirmar agendamento?')) return;
+  if (btnAgendar.disabled) return;
+  if (!confirm('Confirmar agendamento?')) return;
 
   const agendamento = {
     barbeiroId: barbeiroSelecionado,
@@ -886,7 +891,7 @@ btnAgendar.onclick = async () => {
     btnAgendar.disabled = true;
 
     filtrarBarbeirosServicos(); // Atualiza listas
-  } catch(e) {
+  } catch (e) {
     alert('Erro ao enviar agendamento. Tente novamente.');
     console.error(e);
   }
@@ -907,8 +912,8 @@ barraInferior.onclick = () => painelAgendamento.classList.toggle('show');
   await carregarBarbeiros();
   atualizarUltimoAgendamentoLocal();
 })();
-
 </script>
+
 
 
   <script>
