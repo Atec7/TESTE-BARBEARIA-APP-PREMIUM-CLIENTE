@@ -1,6 +1,6 @@
 {
-  "name": "Prem.Adm",
-  "short_name": "Prem.Adm",
+  "name": "Prem.Cliente",
+  "short_name": "Prem.Cliente",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
@@ -19,5 +19,6 @@
     }
   ]
 }
+
 
 
