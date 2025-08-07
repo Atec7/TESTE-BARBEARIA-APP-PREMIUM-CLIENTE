@@ -1,239 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" name="theme-color" content="#FFD700"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Barbearia</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="manifest" href="manifest.json" />
-  <style>
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
-      color: #fff;
-    }
-
-    header {
-      background-color: #000;
-      color: #FFD700;
-      padding: 20px;
-      font-size: 1.8rem;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(255,215,0,0.5);
-      position: relative;
-    }
-
-    #toggleMenu {
-      position: absolute;
-      left: 20px;
-      top: 20px;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .container {
-      display: flex;
-      position: relative;
-    }
-
-    .menu {
-      width: 220px;
-      background: #000;
-      padding: 20px;
-      box-shadow: 2px 0 8px #FFD70055;
-      position: absolute;
-      top: 80px;
-      left: 0;
-      height: calc(100vh - 80px);
-      transition: transform 0.3s ease;
-      z-index: 1000;
-      transform: translateX(-100%);
-    }
-
-    .menu.menu-open {
-      transform: translateX(0);
-    }
-
-    .menu button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      background: #FFD700;
-      color: #000;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .menu button:hover {
-      background: #e6c200;
-    }
-
-    main {
-      flex: 1;
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    h2 {
-      color: #FFD700;
-      margin-top: 40px;
-    }
-
-    p{
-        color: red;
-    }
-    form, .tabela, .servicos-container {
-      background: #1f1f1f;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 0 12px #FFD70055;
-    }
-
-    label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #2a2a2a;
-      color: #fff;
-    }
-
-    button {
-      margin-top: 15px;
-      background: #FFD700;
-      color: #000;
-      padding: 12px 20px;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 8px #FFD70080;
-    }
-
-    button:hover {
-      background: #e6c200;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #444;
-    }
-
-    th {
-      background: #222;
-      color: #FFD700;
-    }
-
-    img {
-      max-width: 80px;
-      border-radius: 6px;
-    }
-
-    .status-aprovado { color: lime; }
-    .status-cancelado { color: red; }
-
-    #btnLimparAgendamentos {
-      background: rgb(1, 169, 1) !important;
-      color: #fff !important;
-      margin-bottom: 10px !important;
-    }
-
-    #btnLimparAgendamentos:hover {
-      background: rgb(4, 143, 4) !important;
-    }
-
-    .hidden {
-      display: none;
-    }
-    #notificacao {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: linear-gradient(135deg, #28a745, #218838); /* verde moderno */
-  color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  padding: 16px 24px;
-  border-radius: 12px;
-  z-index: 9999;
-  box-shadow: 0 4px 20px rgba(0, 128, 0, 0.3);
-  animation: fadeInSlide 0.6s ease-out, subtlePulse 2.5s infinite;
-  max-width: 300px;
-  box-sizing: border-box;
-}
-
-/* Animação de entrada */
-@keyframes fadeInSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Pulso sutil */
-@keyframes subtlePulse {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);
-  }
-  50% {
-    box-shadow: 0 4px 24px rgba(40, 167, 69, 0.6);
-  }
-}
-#btn-som {
-  background-color: #eee;
-  border: 2px solid #888;
-  color: #333;
-  padding: 10px 18px;
-  font-size: 16px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#btn-som.ativo {
-  background-color: #28a745;
-  color: white;
-  border-color: #218838;
-}
-
-#btn-som:hover {
-  opacity: 0.9;
-}
-
-
-  </style>
-</head>
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
 <meta charset="UTF-8" name="theme-color" content="#FFD700"/>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="manifest" href="manifest.json" />
@@ -598,11 +365,11 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
     📲 Contatar Barbearia
   </a>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
 import { getDatabase, ref, get, push } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js";
 
+// --- Configuração Firebase ---
 const firebaseConfig = {
   apiKey: "AIzaSyAbUILxEOHP4Vg18Qw-YpCnoh41kOGwLk0",
   authDomain: "fir-barber-premium.firebaseapp.com",
@@ -617,7 +384,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Elementos do DOM
+// --- Elementos do DOM ---
 const listaBarbeiros = document.getElementById('listaBarbeiros');
 const listaServicos = document.getElementById('listaServicos');
 const dataInput = document.getElementById('data');
@@ -636,16 +403,43 @@ let servicos = {};
 let barbeiroSelecionado = null;
 let servicoSelecionado = null;
 
-// Horários fixos
-const horariosFixos = [];
-for (let h = 9; h <= 18; h++) {
-  horariosFixos.push(`${h.toString().padStart(2,'0')}:00`);
-  horariosFixos.push(`${h.toString().padStart(2,'0')}:30`);
+// --- Horários e dias de funcionamento ---
+let diasPermitidos = []; // 0=Domingo ... 6=Sábado
+let horariosConfig = { inicio: "08:00", fim: "18:00" };
+
+// --- Função para obter data local no formato yyyy-mm-dd ---
+function getDataHojeLocal() {
+  const hoje = new Date();
+  const yyyy = hoje.getFullYear();
+  const mm = String(hoje.getMonth() + 1).padStart(2, '0'); // mês começa em 0
+  const dd = String(hoje.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
-// Data mínima para hoje
-const hojeStr = new Date().toISOString().slice(0,10);
-dataInput.min = hojeStr;
+// --- Data mínima para hoje (local) ---
+dataInput.min = getDataHojeLocal();
+
+// --- Carregar configuração de horários ---
+async function carregarHorariosConfig() {
+  const snap = await get(ref(db, 'horarios'));
+  const dados = snap.val() || {};
+  horariosConfig.inicio = dados.inicio || "08:00";
+  horariosConfig.fim = dados.fim || "18:00";
+  diasPermitidos = Object.keys(dados.dias || {}).map(Number);
+}
+
+// --- Gerar horários entre inicio e fim ---
+function gerarHorariosEntre(inicio, fim) {
+  const horarios = [];
+  let [h, m] = inicio.split(':').map(Number);
+  const [hFim, mFim] = fim.split(':').map(Number);
+  while(h < hFim || (h === hFim && m < mFim)){
+    horarios.push(`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`);
+    m += 30;
+    if(m >= 60){ h++; m=0; }
+  }
+  return horarios;
+}
 
 // --- Carregar barbeiros ---
 async function carregarBarbeiros() {
@@ -660,254 +454,246 @@ async function carregarServicos() {
   servicos = snap.val() || {};
 }
 
-// --- Filtrar barbeiros e serviços dinamicamente ---
-function filtrarBarbeirosServicos() {
-  // Filtrar barbeiros
+// --- Filtrar barbeiros e serviços ---
+function filtrarBarbeirosServicos(){
+  // --- Barbeiros ---
   listaBarbeiros.innerHTML = '';
-  for (const [id, b] of Object.entries(barbeiros)) {
+  for(const [id, b] of Object.entries(barbeiros)){
     const podeExibir = !servicoSelecionado || (b.servicos || []).includes(servicoSelecionado);
-    if (!podeExibir) continue;
+    if(!podeExibir) continue;
 
     const div = document.createElement('div');
-    div.className = 'item-select';
-    div.dataset.id = id;
-    div.innerHTML = `
-      <img src="${b.foto}" alt="Foto do ${b.nome}">
-      <strong>${b.nome}</strong>
-      <small id="contador-${id}">Carregando...</small>
-    `;
-    if (barbeiroSelecionado === id) div.classList.add('selected');
+    div.className='item-select';
+    div.dataset.id=id;
+    div.innerHTML=`<img src="${b.foto}" alt="Foto do ${b.nome}"><strong>${b.nome}</strong><small id="contador-${id}">Carregando...</small>`;
+    if(barbeiroSelecionado===id) div.classList.add('selected');
 
-    div.onclick = () => {
-      barbeiroSelecionado = id;
+    div.onclick=()=>{
+      barbeiroSelecionado=id;
       selecionarVisual(listaBarbeiros, div);
       filtrarBarbeirosServicos();
       atualizarHorasDisponiveis();
       validarFormulario();
-    };
+    }
     listaBarbeiros.appendChild(div);
     contarAgendamentosHoje(id);
   }
 
-  // Filtrar serviços
-  listaServicos.innerHTML = '';
+  // --- Serviços ---
+  listaServicos.innerHTML='';
   const servicosIds = barbeiroSelecionado ? (barbeiros[barbeiroSelecionado].servicos || []) : Object.keys(servicos);
   const servicosFiltrados = servicoSelecionado
     ? [servicoSelecionado].filter(sid => servicos[sid] && (!barbeiroSelecionado || servicosIds.includes(sid)))
     : servicosIds;
 
-  if (servicosFiltrados.length === 0) {
-    listaServicos.innerHTML = '<p>Não há serviços disponíveis.</p>';
-  } else {
-    for (const sid of servicosFiltrados) {
-      const s = servicos[sid];
-      if (!s) continue;
+  if(servicosFiltrados.length===0){ listaServicos.innerHTML='<p>Não há serviços disponíveis.</p>'; }
+  else{
+    for(const sid of servicosFiltrados){
+      const s = servicos[sid]; if(!s) continue;
+      const div=document.createElement('div');
+      div.className='item-select';
+      div.dataset.id=sid;
+      div.innerHTML=`<img src="${s.imagem}" alt="Imagem do serviço ${s.nome}"><strong>${s.nome}</strong><small>R$ ${s.preco} - ${s.tempo} min</small>`;
+      if(servicoSelecionado===sid) div.classList.add('selected');
 
-      const div = document.createElement('div');
-      div.className = 'item-select';
-      div.dataset.id = sid;
-      div.innerHTML = `
-        <img src="${s.imagem}" alt="Imagem do serviço ${s.nome}">
-        <strong>${s.nome}</strong>
-        <small>R$ ${s.preco} - ${s.tempo} min</small>
-      `;
-      if (servicoSelecionado === sid) div.classList.add('selected');
-
-      div.onclick = () => {
-        servicoSelecionado = sid;
+      div.onclick=()=>{
+        servicoSelecionado=sid;
         selecionarVisual(listaServicos, div);
         filtrarBarbeirosServicos();
         atualizarHorasDisponiveis();
         validarFormulario();
-      };
+      }
       listaServicos.appendChild(div);
     }
   }
 }
 
 // --- Seleção visual ---
-function selecionarVisual(container, selecionadoDiv) {
-  [...container.children].forEach(c => c.classList.remove('selected'));
-  if (selecionadoDiv) selecionadoDiv.classList.add('selected');
+function selecionarVisual(container, selecionadoDiv){
+  [...container.children].forEach(c=>c.classList.remove('selected'));
+  if(selecionadoDiv) selecionadoDiv.classList.add('selected');
 }
 
 // --- Carregar agendamentos ---
-async function carregarAgendamentos() {
-  const snap = await get(ref(db, 'agendamentos'));
-  return snap.val() || {};
+async function carregarAgendamentos(){
+  const snap = await get(ref(db,'agendamentos'));
+  return snap.val()||{};
 }
 
-// --- Conversões de horários ---
-function horarioToMin(hhmm) {
-  const [hh, mm] = hhmm.split(':').map(Number);
-  return hh * 60 + mm;
-}
-
-function minToHorario(min) {
-  const h = Math.floor(min / 60);
-  const m = min % 60;
-  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-}
+// --- Conversão horários ---
+function horarioToMin(hhmm){ const [hh,mm]=hhmm.split(':').map(Number); return hh*60+mm; }
+function minToHorario(min){ const h=Math.floor(min/60); const m=min%60; return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
 
 // --- Atualizar horários disponíveis ---
-async function atualizarHorasDisponiveis() {
-  horaSelect.innerHTML = '';
-  horaSelect.disabled = true;
-  btnAgendar.disabled = true;
+async function atualizarHorasDisponiveis(){
+  horaSelect.innerHTML='';
+  horaSelect.disabled=true;
+  btnAgendar.disabled=true;
 
-  if (!barbeiroSelecionado || !servicoSelecionado || !dataInput.value) {
-    horaSelect.innerHTML = `<option>Escolha barbeiro, serviço e data</option>`;
+  if(!barbeiroSelecionado || !servicoSelecionado || !dataInput.value){
+    horaSelect.innerHTML=`<option>Escolha barbeiro, serviço e data</option>`;
+    return;
+  }
+
+  // --- Verificar dia permitido ---
+  const diaSemana = new Date(dataInput.value).getDay();
+  if(!diasPermitidos.includes(diaSemana)){
+    alert('Dia não disponível para agendamento.');
+    dataInput.value='';
     return;
   }
 
   const agendamentos = await carregarAgendamentos();
-  const tempoServico = Number(servicos[servicoSelecionado]?.tempo) || 30;
+  const tempoServico = Number(servicos[servicoSelecionado]?.tempo)||30;
   const dataSel = dataInput.value;
+  const horariosGerados = gerarHorariosEntre(horariosConfig.inicio, horariosConfig.fim);
+  const disponiveis = horariosGerados.map(h=>({hora:h, disponivel:true}));
 
-  const agendamentosDoDia = Object.values(agendamentos).filter(a => {
-    if (a.barbeiroId !== barbeiroSelecionado) return false;
+  // --- Conflitos com agendamentos existentes ---
+  const agendamentosDoDia = Object.values(agendamentos).filter(a=>a.barbeiroId===barbeiroSelecionado && a.horario.slice(0,10)===dataSel);
+  agendamentosDoDia.forEach(a=>{
     const dt = new Date(a.horario);
-    return dt.toISOString().slice(0, 10) === dataSel;
-  });
+    const inicioAg = dt.getHours()*60 + dt.getMinutes();
+    const duracaoAg = Number(servicos[a.servicoId]?.tempo)||30;
+    const fimAg = inicioAg+duracaoAg;
 
-  const disponiveis = horariosFixos.map(h => ({ hora: h, disponivel: true }));
-
-  agendamentosDoDia.forEach(a => {
-    const dt = new Date(a.horario);
-    const inicio = dt.getHours() * 60 + dt.getMinutes();
-    const servTempo = Number(servicos[a.servicoId]?.tempo) || 30;
-    const fim = inicio + servTempo;
-
-    disponiveis.forEach(slot => {
+    disponiveis.forEach(slot=>{
       const slotInicio = horarioToMin(slot.hora);
-      const slotFim = slotInicio + tempoServico;
-      if (!(slotFim <= inicio || slotInicio >= fim)) slot.disponivel = false;
+      const slotFim = slotInicio+tempoServico;
+      if(!(slotFim<=inicioAg || slotInicio>=fimAg)) slot.disponivel=false;
     });
   });
 
+  // --- Bloquear horários passados ---
+  const hojeLocalStr = getDataHojeLocal();
   const agora = new Date();
-  if (dataSel === agora.toISOString().slice(0, 10)) {
-    const agoraMin = agora.getHours() * 60 + agora.getMinutes();
-    disponiveis.forEach(slot => {
-      const slotInicio = horarioToMin(slot.hora);
-      if (slotInicio <= agoraMin) slot.disponivel = false;
+  if(dataSel === hojeLocalStr){
+    const agoraMin=agora.getHours()*60+agora.getMinutes();
+    disponiveis.forEach(slot=>{
+      if(horarioToMin(slot.hora)<=agoraMin) slot.disponivel=false;
     });
   }
 
-  const horariosValidos = disponiveis.filter(d => d.disponivel);
-  if (horariosValidos.length === 0) {
-    horaSelect.innerHTML = `<option>Sem horários disponíveis</option>`;
+  const horariosValidos = disponiveis.filter(d=>d.disponivel);
+  if(horariosValidos.length===0){
+    horaSelect.innerHTML=`<option>Sem horários disponíveis</option>`;
     return;
   }
 
-  horaSelect.innerHTML = `<option value="">Selecione o horário</option>`;
-  horariosValidos.forEach(d => {
-    horaSelect.innerHTML += `<option value="${d.hora}">${d.hora}</option>`;
+  horaSelect.innerHTML=`<option value="">Selecione o horário</option>`;
+  horariosValidos.forEach(d=>{
+    horaSelect.innerHTML+=`<option value="${d.hora}">${d.hora}</option>`;
   });
-
-  horaSelect.disabled = false;
+  horaSelect.disabled=false;
 }
 
 // --- Validar formulário ---
-function validarFormulario() {
-  btnAgendar.disabled = !(barbeiroSelecionado && servicoSelecionado && dataInput.value && horaSelect.value && nomeInput.value.trim() && whatsappInput.value.trim());
+function validarFormulario(){
+  btnAgendar.disabled=!(barbeiroSelecionado && servicoSelecionado && dataInput.value && horaSelect.value && nomeInput.value.trim() && whatsappInput.value.trim());
 }
 
 // --- Contar agendamentos hoje ---
-async function contarAgendamentosHoje(barbeiroId) {
-  const snap = await get(ref(db, 'agendamentos'));
+// --- Contar agendamentos do dia atual ---
+async function contarAgendamentosHoje(barbeiroId){
+  const snap = await get(ref(db,'agendamentos'));
   const agendamentos = snap.val() || {};
-  const hoje = new Date().toISOString().slice(0, 10);
+  const hoje = new Date();
   let total = 0;
-  for (const ag of Object.values(agendamentos)) {
-    if (ag.barbeiroId === barbeiroId) {
-      const dataAg = new Date(ag.horario).toISOString().slice(0, 10);
-      if (dataAg === hoje) total++;
+
+  for(const ag of Object.values(agendamentos)){
+    if(ag.barbeiroId !== barbeiroId) continue;
+
+    const dataAgendamento = new Date(ag.horario);
+    // Comparar dia, mês e ano
+    if(dataAgendamento.getFullYear() === hoje.getFullYear() &&
+       dataAgendamento.getMonth() === hoje.getMonth() &&
+       dataAgendamento.getDate() === hoje.getDate()){
+      total++;
     }
   }
+
   const contadorEl = document.getElementById(`contador-${barbeiroId}`);
-  if (contadorEl) contadorEl.textContent = `${total} agendamentos hoje`;
+  if(contadorEl) contadorEl.textContent = `${total} agendamentos hoje`;
 }
 
+
 // --- Atualizar último agendamento ---
-function atualizarUltimoAgendamentoLocal() {
-  const ultimo = localStorage.getItem('ultimoAgendamento');
-  if (!ultimo) {
-    detalhesAgendamento.innerHTML = `<p>Nenhum agendamento realizado ainda.</p>`;
-    btnContatoWhats.href = `https://wa.me/5564992952748`;
+function atualizarUltimoAgendamentoLocal(){
+  const ultimo=localStorage.getItem('ultimoAgendamento');
+  if(!ultimo){
+    detalhesAgendamento.innerHTML=`<p>Nenhum agendamento realizado ainda.</p>`;
+    btnContatoWhats.href=`https://wa.me/5564992952748`;
     return;
   }
 
-  const ag = JSON.parse(ultimo);
-  const barbeiroNome = barbeiros[ag.barbeiroId]?.nome || 'Barbeiro';
-  const servicoNome = servicos[ag.servicoId]?.nome || 'Serviço';
-  const dataHora = new Date(ag.horario);
-  const dataFormatada = dataHora.toLocaleDateString('pt-BR');
-  const horaFormatada = dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const ag=JSON.parse(ultimo);
+  const barbeiroNome=barbeiros[ag.barbeiroId]?.nome||'Barbeiro';
+  const servicoNome=servicos[ag.servicoId]?.nome||'Serviço';
+  const dataHora=new Date(ag.horario);
+  const dataFormatada=dataHora.toLocaleDateString('pt-BR');
+  const horaFormatada=dataHora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 
-  detalhesAgendamento.innerHTML = `
+  detalhesAgendamento.innerHTML=`
     <p><strong>Cliente:</strong> ${ag.nome}</p>
     <p><strong>Barbeiro:</strong> ${barbeiroNome}</p>
     <p><strong>Serviço:</strong> ${servicoNome}</p>
     <p><strong>Data:</strong> ${dataFormatada} às ${horaFormatada}</p>
   `;
 
-  const mensagem = encodeURIComponent(`Olá, gostaria de falar sobre meu agendamento realizado para ${dataFormatada} às ${horaFormatada}.`);
-  btnContatoWhats.href = `https://wa.me/5564992952748?text=${mensagem}`;
+  const mensagem=encodeURIComponent(`Olá, gostaria de falar sobre meu agendamento realizado para ${dataFormatada} às ${horaFormatada}.`);
+  btnContatoWhats.href=`https://wa.me/5564992952748?text=${mensagem}`;
 }
 
 // --- Botão agendar ---
-btnAgendar.onclick = async () => {
-  if (btnAgendar.disabled) return;
-  if (!confirm('Confirmar agendamento?')) return;
+btnAgendar.onclick=async ()=>{
+  if(btnAgendar.disabled) return;
+  if(!confirm('Confirmar agendamento?')) return;
 
-  const agendamento = {
-    barbeiroId: barbeiroSelecionado,
-    servicoId: servicoSelecionado,
-    nome: nomeInput.value.trim(),
-    whatsapp: whatsappInput.value.trim(),
-    horario: `${dataInput.value}T${horaSelect.value}:00`,
-    status: "Agendado"
+  const agendamento={
+    barbeiroId:barbeiroSelecionado,
+    servicoId:servicoSelecionado,
+    nome:nomeInput.value.trim(),
+    whatsapp:whatsappInput.value.trim(),
+    horario:`${dataInput.value}T${horaSelect.value}:00`,
+    status:"Agendado"
   };
 
-  try {
-    await push(ref(db, 'agendamentos'), agendamento);
+  try{
+    await push(ref(db,'agendamentos'), agendamento);
     localStorage.setItem('ultimoAgendamento', JSON.stringify(agendamento));
     atualizarUltimoAgendamentoLocal();
 
     msgSucesso.classList.add('show');
-    setTimeout(() => msgSucesso.classList.remove('show'), 4000);
+    setTimeout(()=>msgSucesso.classList.remove('show'),4000);
 
     // Reset
-    barbeiroSelecionado = null;
-    servicoSelecionado = null;
-    selecionarVisual(listaBarbeiros, null);
-    listaServicos.innerHTML = '';
-    dataInput.value = '';
-    horaSelect.innerHTML = `<option>Escolha barbeiro, serviço e data</option>`;
-    horaSelect.disabled = true;
-    nomeInput.value = '';
-    whatsappInput.value = '';
-    btnAgendar.disabled = true;
-
-    filtrarBarbeirosServicos(); // Atualiza listas
-  } catch (e) {
+    barbeiroSelecionado=null;
+    servicoSelecionado=null;
+    selecionarVisual(listaBarbeiros,null);
+    listaServicos.innerHTML='';
+    dataInput.value='';
+    horaSelect.innerHTML=`<option>Escolha barbeiro, serviço e data</option>`;
+    horaSelect.disabled=true;
+    nomeInput.value='';
+    whatsappInput.value='';
+    btnAgendar.disabled=true;
+    filtrarBarbeirosServicos();
+  }catch(e){
     alert('Erro ao enviar agendamento. Tente novamente.');
     console.error(e);
   }
 };
 
 // --- Eventos ---
-dataInput.onchange = () => { atualizarHorasDisponiveis(); validarFormulario(); };
-horaSelect.onchange = validarFormulario;
-nomeInput.oninput = validarFormulario;
-whatsappInput.oninput = validarFormulario;
-
-// --- Toggle painel inferior ---
-barraInferior.onclick = () => painelAgendamento.classList.toggle('show');
+dataInput.onchange=()=>{ atualizarHorasDisponiveis(); validarFormulario(); };
+horaSelect.onchange=validarFormulario;
+nomeInput.oninput=validarFormulario;
+whatsappInput.oninput=validarFormulario;
+barraInferior.onclick=()=>painelAgendamento.classList.toggle('show');
 
 // --- Inicialização ---
-(async () => {
+(async()=>{
+  await carregarHorariosConfig();
   await carregarServicos();
   await carregarBarbeiros();
   atualizarUltimoAgendamentoLocal();
